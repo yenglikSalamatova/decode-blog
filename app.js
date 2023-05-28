@@ -24,7 +24,6 @@ const viewRouter = require("./routes/viewRoutes");
 const commentRouter = require("./routes/commentRoutes");
 const categoryController = require("./controllers/categoryController");
 const { currentUserMiddleware } = require("./utils/middlewares");
-// const passportStrategy = require("./server/config/passport");
 
 // Application express
 const app = express();
