@@ -66,7 +66,7 @@ exports.getBlog = catchAsync(async (req, res, next) => {
         select: "username photo"
       }
     });
-  console.log(blog.comments.length);
+
   const bookmark = await Bookmark.findOne({ user: req.user, blog: blog._id });
   await Blog.findByIdAndUpdate(blog._id, { $inc: { views: 1 } });
   res.status(200).render("logged-blog-1", {

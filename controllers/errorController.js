@@ -22,9 +22,6 @@ const handlePassportError = () =>
   new AppError("Для доступа к ресурсу необходимо авторизоваться", 401);
 
 const sendErrorDev = (err, res) => {
-  console.log(err.statusCode);
-  console.log(err.stack);
-  console.log(err.status);
   res.status(err.statusCode).json({
     status: err.status,
     error: err,

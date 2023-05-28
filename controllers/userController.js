@@ -34,7 +34,6 @@ exports.signUp = catchAsync(async (req, res) => {
 
 exports.signIn = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
 
   if (!email || !password) {
     return next(new AppError("Please provide email and password!", 400));
@@ -221,8 +220,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.file) {
     filteredBody["photo"] = `/images/blog/${req.file.filename}`;
   }
-
-  console.log(filteredBody);
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,

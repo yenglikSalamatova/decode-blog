@@ -2,7 +2,6 @@ const articleBookmarks = document.querySelectorAll(".article-bookmarks");
 
 const saveBlog = async (blogId, userId) => {
   try {
-    console.log(blogId, userId);
     const response = await axios.post(`/api/users/bookmark/${blogId}`, {
       userId
     });
@@ -13,7 +12,6 @@ const saveBlog = async (blogId, userId) => {
 
 const removeBookmark = async (blogId, userId) => {
   try {
-    console.log(blogId, userId);
     const response = await axios.delete(`/api/users/bookmark/${blogId}`, {
       data: { userId }
     });

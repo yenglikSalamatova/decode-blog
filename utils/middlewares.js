@@ -20,7 +20,6 @@ const isAdmin = (req, res, next) => {
 const checkBlogAccess = catchAsync(async (req, res, next) => {
   const blog = await Blog.findById(req.params.id).populate("author");
   const userId = req.user.id;
-  console.log(blog.author.id, userId);
   if (req.user.role === "admin") {
     return next();
   }

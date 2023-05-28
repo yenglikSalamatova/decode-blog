@@ -11,6 +11,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const flash = require("connect-flash");
+const compression = require("compression");
 
 // Errors import
 const AppError = require("./utils/appError");
@@ -118,6 +119,8 @@ app.use("/api/blogs", blogRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/users", userRouter);
 app.use("/api/comments", commentRouter);
+
+app.use(compression());
 
 // Global Error Handler
 app.all("*", (req, res, next) => {

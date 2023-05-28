@@ -144,7 +144,6 @@ async function handleDeleteComment(event) {
   const comment = event.target.closest(".comment");
   const commentId = comment.getAttribute("data-comment-id");
   const blogId = comment.getAttribute("data-blog-id");
-  console.log(commentId);
   const confirmation = confirm("Вы точно хотите удалить комментарии?");
   if (confirmation) {
     const res = await axios.delete("/api/comments/", {
@@ -169,7 +168,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const commentElement = document.querySelector(
       `[data-comment-id="${commentId}"]`
     );
-    console.log(commentElement);
     if (commentElement) {
       commentElement.scrollIntoView({ behavior: "smooth" }); // Прокрутка к комментарию
     }
