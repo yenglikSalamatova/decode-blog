@@ -1,0 +1,109 @@
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <%- include('./partials/header.ejs') %>
+  <div class="container">
+    <section class="section-all_blogs">
+      <% if (selectedCategory) { %> <%= console.log(selectedCategory) %>
+      <h2 class="heading heading-second"><%= selectedCategory.title %></h2>
+
+      <% } else { %>
+      <h2 class="heading heading-second">Все блоги</h2>
+      <% } %>
+      <div class="all-articles">
+        <% blogs.forEach(blog => { %>
+        <div class="article popular-article">
+          <a href="/blog/<%= blog.slug %>" class="article_img">
+            <img src="<%= blog.image %>" alt="" />
+          </a>
+          <div class="article-info">
+            <div>
+              <div class="article-header">
+                <a href="?category=<%= blog.category.slug %>" class="category"
+                  ><%= blog.category.title %></a
+                >
+                <div class="dash"></div>
+                <p class="datetime">
+                  <%= blog.createdAt.toLocaleDateString() %>
+                </p>
+              </div>
+              <a href="/blog/<%= blog.slug %>">
+                <h3 class="heading heading-third"><%= blog.title %></h3>
+              </a>
+            </div>
+
+            <div class="article-footer">
+              <div class="article-author">
+                <div class="author-article">
+                  <img src="<%= blog.author.photo %>" alt="" />
+                </div>
+                <%= blog.author.username %>
+              </div>
+              <div class="article-right">
+                <div
+                  class="article-bookmarks <% const bookmark = bookmarks.find(item => item.blog.toString() === blog._id.toString()); %> <% if (bookmark && bookmark.state === 'active') { %> bookmark-active <% } %>"
+                  data-blog-id="<%= blog.id %>"
+                  data-current-user=""
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.3335 2C11.6871 2 12.0263 2.14048 12.2763 2.39052C12.5264 2.64057 12.6668 2.97971 12.6668 3.33333V12.7027C12.6668 13.726 11.5608 14.368 10.6722 13.86L8.6615 12.7113C8.46008 12.5963 8.23213 12.5358 8.00016 12.5358C7.7682 12.5358 7.54025 12.5963 7.33883 12.7113L5.32816 13.86C4.44016 14.368 3.3335 13.7267 3.3335 12.7027V3.33333C3.3335 2.97971 3.47397 2.64057 3.72402 2.39052C3.97407 2.14048 4.31321 2 4.66683 2H11.3335Z"
+                      stroke="black"
+                      stroke-width="1.33333"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="article-comments">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5.33333 6.66667H5.34M8 6.66667H8.00667M10.6667 6.66667H10.6733M14 8.66667V4.66667C14 3.40933 14 2.78133 13.6093 2.39067C13.2187 2 12.5907 2 11.3333 2H4.66667C3.40933 2 2.78133 2 2.39067 2.39067C2 2.78133 2 3.40933 2 4.66667V8.66667C2 9.924 2 10.552 2.39067 10.9427C2.78133 11.3333 3.40933 11.3333 4.66667 11.3333H5C5.08841 11.3333 5.17319 11.3685 5.2357 11.431C5.29821 11.4935 5.33333 11.5783 5.33333 11.6667V13.4333C5.33333 13.6693 5.60067 13.8053 5.792 13.6667L8.73067 11.5293C8.90533 11.402 9.11667 11.3333 9.33333 11.3333H11.3333C12.5907 11.3333 13.2187 11.3333 13.6093 10.9427C14 10.552 14 9.924 14 8.66667Z"
+                      stroke="black"
+                      stroke-width="1.33333"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+
+                  <%= blog.comments.length %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </section>
+    <ul class="pagination">
+      <% let query=""; if (selectedCategory) { query =
+      `?category=${selectedCategory.slug}&`; } if(search) { query +=
+      `?search=${search}&`; }%> <% for( let i = 0; i < totalPages; i++ ) { %>
+      <a
+        class="page-number <%= currentPage===i+1? 'is-active' : '' %>"
+        href="<%= `${query}?page=${i + 1}` %>"
+        ><%= i+1 %></a
+      >
+      <% } %>
+    </ul>
+  </div>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+    integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script src="/js/bookmark.js"></script>
+</body>

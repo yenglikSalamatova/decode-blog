@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <%- include('./partials/head.ejs') %>
+
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <div class="container">
+      <main class="main-myblogs">
+        <%- include('./partials/profile-header.ejs') %>
+        <div class="myblogs-left">
+          <div>
+            <h3 class="heading-third">Комментарии</h3>
+            <div class="alert alert-info">
+              Чтобы отредактировать или удалить комментарии сначала перейдите к
+              нему и нажмите на его параметры.
+            </div>
+          </div>
+
+          <% comments.forEach(comment => { %>
+          <div class="myblogs-comment">
+            <a href="/blog/<%= comment.blog.slug %>"
+              ><h4><%= comment.blog.title %></h4></a
+            >
+            <div class="comment-header">
+              <div class="comment-author">
+                <img src="<%= comment.user.photo %>" alt="" />
+                <a href="/user/<%= comment.user.username %>"
+                  ><%= comment.user.username %></a
+                >
+                <p class="datetime">
+                  <%= comment.createdAt.toLocaleString([],{ dateStyle: 'short',
+                  timeStyle: 'short' }) %>
+                </p>
+              </div>
+            </div>
+            <p><%= comment.content %></p>
+            <a
+              href="/blog/<%= comment.blog.slug %>#<%= comment._id %>"
+              class="btn btn-fill"
+              data-comment-id="<%= comment._id %>"
+              >Перейти к комментарию</a
+            >
+          </div>
+          <% }) %>
+        </div>
+
+        <div class="myblogs-right">
+          <img src="<%= profileUser.photo %>" alt="" />
+          <p><span><%= profileUser.username %></span></p>
+          <p><%= profileUser.description %></p>
+          <p><%= blogsLength %> постов за все время</p>
+          <% if (currentUser.id == profileUser.id) { %>
+          <button class="btn btn-fill">Редактировать</button>
+          <% } %>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <div class="login-container">
+    <a href="/"><img src="/images/logo2.svg" alt="" class="logo" /></a>
+    <form action="/api/users/signup" method="post" class="form-login">
+      <div class="form-heading">
+        <h3 class="heading-third">Регистрация</h3>
+        <p>Создайте аккаунт чтобы продолжить.</p>
+      </div>
+      <div class="form-box">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="Введите ваш email" />
+        <label for="username">Введите логин</label>
+        <input type="text" name="username" id="username" placeholder="Введите ваше полное имя" />
+
+        <label for="password">Пароль</label>
+        <input type="password" name="password" id="password" placeholder="Введите ваш пароль" />
+        <label for="re_password">Повторите пароль</label>
+        <input type="password" name="re_password" id="re_password" placeholder="Повторите ваш пароль" />
+      </div>
+
+      <button type="submit" class="btn btn-fill">Зарегистрироваться</button>
+      <p>Уже есть аккаунт? <a href="/login">Войти</a></p>
+    </form>
+  </div>
+</body>
+
+</html>

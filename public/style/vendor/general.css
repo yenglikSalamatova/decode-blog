@@ -1,0 +1,153 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f0f0f1;
+}
+input {
+  font-family: "Inter", sans-serif;
+}
+a {
+  text-decoration: none;
+}
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.btn,
+.btn:link,
+.btn:visited {
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  padding: 9px 25px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  transition: 0.3s ease;
+  border: none;
+}
+.logo {
+  width: 225px;
+  height: 38px;
+}
+.heading {
+  color: #25273b;
+}
+h1 {
+  color: #25273b;
+  font-size: 25px;
+  font-weight: 700;
+}
+.heading.heading-second {
+  margin-bottom: 25px;
+}
+.heading-second,
+h2 {
+  color: #25273b;
+  font-size: 22px;
+  font-weight: 700;
+}
+.heading-third-popular {
+  font-size: 28px;
+  font-weight: 700;
+}
+.heading-third,
+h3 {
+  color: #25273b;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.heading-fourth,
+h4 {
+  color: #25273b;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.btn-fill {
+  background-color: #0d55ff;
+  border-radius: 6px;
+  color: #fff;
+  transition: 0.3s;
+}
+.btn-fill:hover {
+  background-color: #0b40bc;
+}
+.error-message {
+  padding: 20px;
+  border-radius: 6px;
+  background-color: #ee9090;
+  color: #000;
+}
+input {
+  padding: 0;
+  margin: 0;
+}
+input::placeholder {
+  padding: 0;
+  margin: 0;
+  text-indent: 0;
+}
+input:focus {
+  outline: 2px solid #0b40bc;
+}
+p {
+  word-wrap: break-word;
+  font-size: 16px;
+  line-height: 1.56;
+}
+pre {
+  background-color: #3a3a3a !important;
+  color: #f2dede !important;
+  padding: 20px !important;
+  font-family: monospace !important;
+}
+strong {
+  font-weight: 700;
+}
+i {
+  font-style: italic;
+}
+.bookmark-active svg path {
+  stroke: #0b40bc !important;
+}
+.pagination {
+  margin-top: auto;
+  padding: 30px 0;
+  display: flex;
+  gap: 13px;
+  justify-content: center;
+  align-items: center;
+}
+.pagination a {
+  display: inline-block;
+  padding: 5px;
+  color: #222;
+  transition: border-bottom 0.8s ease;
+}
+.pagination .is-active {
+  font-weight: bold;
+  border-bottom: 2px solid #0d55ff;
+}
+.alert {
+  font-size: 15px;
+  border-radius: 6px;
+  padding: 13px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+.alert-info {
+  background-color: #f0ecd8;
+  border-color: #e9dac6;
+  color: #76613c;
+}
+.alert-info a {
+  text-decoration: underline;
+  font-weight: 600;
+  color: #3c6776;
+}
+.hidden {
+  display: none;
+}

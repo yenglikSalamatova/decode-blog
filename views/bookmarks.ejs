@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <%- include('./partials/head.ejs') %>
+
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <div class="container">
+      <main class="main-myblogs">
+        <%- include('./partials/profile-header.ejs') %>
+        <div class="myblogs-left">
+          <div class="myblogs__new">
+            <h3 class="heading-third">Закладки</h3>
+          </div>
+          <% if (bookmarks.length>0) { %> <% bookmarks.forEach(bookmark => { %>
+          <article class="my-article">
+            <img src="<%= bookmark.blog.image %>" alt="" />
+            <div class="article-info">
+              <div class="article-top-myblogs">
+                <div class="article-header">
+                  <a href="/blogs/<%= bookmark.blog.category.slug %>"
+                    ><%= bookmark.blog.category.title %></a
+                  >
+                  <div class="dash"></div>
+                  <time datetime="2023-04-11"
+                    ><%= bookmark.blog.createdAt.toLocaleDateString() %></time
+                  >
+                </div>
+                <% if (currentUser.id === profileUser.id) { %>
+                <div
+                  class="article-bookmarks bookmark-active"
+                  data-blog-id="<%= bookmark.blog._id %>"
+                  data-current-user="<%= currentUser.id %>"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.3335 2C11.6871 2 12.0263 2.14048 12.2763 2.39052C12.5264 2.64057 12.6668 2.97971 12.6668 3.33333V12.7027C12.6668 13.726 11.5608 14.368 10.6722 13.86L8.6615 12.7113C8.46008 12.5963 8.23213 12.5358 8.00016 12.5358C7.7682 12.5358 7.54025 12.5963 7.33883 12.7113L5.32816 13.86C4.44016 14.368 3.3335 13.7267 3.3335 12.7027V3.33333C3.3335 2.97971 3.47397 2.64057 3.72402 2.39052C3.97407 2.14048 4.31321 2 4.66683 2H11.3335Z"
+                      stroke="black"
+                      stroke-width="1.33333"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <% } %>
+              </div>
+              <a href="/blog/<%= bookmark.blog.slug %>">
+                <h3 class="heading heading-third">
+                  <%= bookmark.blog.title %>
+                </h3>
+              </a>
+              <p class="article-text"><%= bookmark.blog.description %></p>
+              <div class="article-footer">
+                <div class="article-author">
+                  <div class="author-article">
+                    <img src="<%= bookmark.blog.author.photo %>" alt="" />
+                  </div>
+                  <%= bookmark.blog.author.username %>
+                </div>
+                <div class="article-right">
+                  <div class="article-views">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M10 8C10 8.53043 9.78929 9.03914 9.41421 9.41421C9.03914 9.78929 8.53043 10 8 10C7.46957 10 6.96086 9.78929 6.58579 9.41421C6.21071 9.03914 6 8.53043 6 8C6 7.46957 6.21071 6.96086 6.58579 6.58579C6.96086 6.21071 7.46957 6 8 6C8.53043 6 9.03914 6.21071 9.41421 6.58579C9.78929 6.96086 10 7.46957 10 8Z"
+                        stroke="black"
+                        stroke-width="1.33333"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M4.63325 4.70001C5.0666 4.26662 5.58107 3.92283 6.14729 3.68828C6.71351 3.45373 7.32038 3.33301 7.93325 3.33301C8.54613 3.33301 9.153 3.45373 9.71922 3.68828C10.2854 3.92283 10.7999 4.26662 11.2333 4.70001L12.6466 6.11468C13.5359 7.00334 13.9799 7.44801 13.9799 8.00001C13.9799 8.55201 13.5359 8.99668 12.6466 9.88534L11.2333 11.3C10.7999 11.7334 10.2854 12.0772 9.71922 12.3117C9.153 12.5463 8.54613 12.667 7.93325 12.667C7.32038 12.667 6.71351 12.5463 6.14729 12.3117C5.58107 12.0772 5.0666 11.7334 4.63325 11.3L3.21859 9.88534C2.32992 8.99668 1.88525 8.55201 1.88525 8.00001C1.88525 7.44801 2.32992 7.00334 3.21859 6.11468L4.63325 4.70001Z"
+                        stroke="black"
+                        stroke-width="1.33333"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <%= bookmark.blog.views %>
+                  </div>
+                  <div class="article-comments">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.33333 6.66667H5.34M8 6.66667H8.00667M10.6667 6.66667H10.6733M14 8.66667V4.66667C14 3.40933 14 2.78133 13.6093 2.39067C13.2187 2 12.5907 2 11.3333 2H4.66667C3.40933 2 2.78133 2 2.39067 2.39067C2 2.78133 2 3.40933 2 4.66667V8.66667C2 9.924 2 10.552 2.39067 10.9427C2.78133 11.3333 3.40933 11.3333 4.66667 11.3333H5C5.08841 11.3333 5.17319 11.3685 5.2357 11.431C5.29821 11.4935 5.33333 11.5783 5.33333 11.6667V13.4333C5.33333 13.6693 5.60067 13.8053 5.792 13.6667L8.73067 11.5293C8.90533 11.402 9.11667 11.3333 9.33333 11.3333H11.3333C12.5907 11.3333 13.2187 11.3333 13.6093 10.9427C14 10.552 14 9.924 14 8.66667Z"
+                        stroke="black"
+                        stroke-width="1.33333"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+
+                    4
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+          <% }) %> <% } %> <% if (!bookmarks) { %>
+          <p>У пользователя пока нет закладок</p>
+          <% } %>
+        </div>
+
+        <div class="myblogs-right">
+          <img src="<%= profileUser.photo %>" alt="" />
+          <p><span><%= profileUser.username %></span></p>
+          <p><%= profileUser.description %></p>
+          <p><%= blogsLength %> постов за все время</p>
+          <% if (currentUser.id == profileUser.id) { %>
+          <button class="btn btn-fill">Редактировать</button>
+          <% } %>
+        </div>
+      </main>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+      integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/js/profile.js"></script>
+    <script src="/js/bookmark.js"></script>
+  </body>
+</html>

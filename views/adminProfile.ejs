@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs') %>
+  <title>Админ</title>
+</head>
+
+<body>
+  <%- include('./partials/header.ejs') %>
+  <div class="container">
+    <main class="main-myblogs">
+      <div class="myblogs-left-top">
+        <a href="">Блоги</a>
+        <a href="">Комментарии</a>
+        <a href="">Пользователи</a>
+      </div>
+      <div class="myblogs-left">
+        <div class="myblogs__new">
+          <h3 class="heading-third">Все блоги</h3>
+          <a href="/new" class="btn btn-full">Новый блог</a>
+        </div>
+
+        <% blogs.forEach(blog => { %>
+        <article class="my-article">
+          <img src="<%=blog.image%>" alt="" />
+          <div class="article-info">
+            <div class="article-top-myblogs">
+              <div class="article-top_left">
+                <a href=""><%=blog.category.title%></a>
+                <div class="line"></div>
+                <time datetime="2023-04-11"><%=blog.createdAt.toLocaleDateString()%></time>
+              </div>
+              <div class="article-top__right">
+                <img src="/images/icons/dots.svg" alt="" class="article-settings" />
+                <div class="article-settings__hover">
+                  <a href="/edit/<%= blog._id %>">Редактировать</a>
+                  <form action="/api/blogs/<%= blog._id %>?_method=DELETE" method="post">
+                    <button type="submit">Удалить</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <h3 class="heading-third"><%=blog.title%></h3>
+            <p class="article-text"><%=blog.description%></p>
+            <div class="article-bottom">
+              <div class="article-author">
+                <img src="/images/icons/user.svg" alt="" />
+                <p><%=blog.author.full_name%></p>
+              </div>
+              <div class="article-bottom-right">
+                <div class="article-views">
+                  <img src="/images/icons/views.svg" alt="" />
+                  <p><%=blog.views%></p>
+                </div>
+                <div class="article-comments">
+                  <img src="/images/icons/comm.svg" alt="" />
+                  <p><%=blog.comments%></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+        <% }) %>
+      </div>
+
+      <div class="myblogs-right">
+        <img src="<%= user.photo %>" alt="" />
+        <p><span><%= user.full_name %></span></p>
+        <p><%= user.description %></p>
+        <p>40 постов за все время</p>
+        <button class="btn btn-full">Редактировать</button>
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>

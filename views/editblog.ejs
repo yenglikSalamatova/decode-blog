@@ -1,0 +1,105 @@
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <%- include('./partials/header.ejs') %>
+  <div class="container">
+    <div class="new-container">
+      <form class="form-new" enctype="multipart/form-data">
+        <div class="form-heading">
+          <h3 class="heading heading-third">Редактировать блог</h3>
+        </div>
+        <div class="form-box-new">
+          <input type="hidden" name="blogId" value="<%= blog._id %>" />
+          <input
+            type="hidden"
+            name="currentUser"
+            value="<%= currentUser.username %>"
+          />
+          <input
+            type="text"
+            name="blog_title"
+            id="blog_title"
+            placeholder="Заголовок блога"
+            value="<%= blog.title %>"
+          />
+          <select name="category" id="category">
+            <option selected value="<%= blog.category._id %>">
+              <%= blog.category.title %>
+            </option>
+            <% categories.forEach(category=> { %>
+            <option value="<%= category._id %>"><%= category.title %></option>
+            <% }) %>
+          </select>
+          <label for="blog-img" class="file-label"
+            >Обновите обложку блога</label
+          >
+          <input type="file" name="blog-img" id="blog-img" accept="image/*" />
+          <textarea
+            id="newblog_description"
+            name="newblog_description"
+            rows="6"
+            cols="50"
+            placeholder="Короткое описание блога"
+          >
+<%= blog.description %></textarea
+          >
+          <textarea name="editor" id="editor"><%= blog.text %></textarea>
+          <input
+            type="text"
+            name="tags"
+            id="tags"
+            placeholder="Введите теги блога через запятую"
+            value="<%= blog.tags %>"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-fill">Обновить</button>
+      </form>
+    </div>
+  </div>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+    integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script src="/js/ckeditor/build/ckeditor.js"></script>
+  <script>
+    ClassicEditor.create(document.querySelector("#editor"), {
+      licenseKey: "",
+      image: {
+        // Настраиваем название поля input для вставки изображения
+        upload: {
+          fieldName: "upload"
+          // ...
+        }
+        // ...
+      },
+      simpleUpload: {
+        // The URL that the images are uploaded to.
+        uploadUrl: "http://127.0.0.1:8000/api/blogs/upload-image",
+
+        // Enable the XMLHttpRequest.withCredentials property.
+        withCredentials: true,
+
+        // Headers sent along with the XMLHttpRequest to the upload server.
+        headers: {
+          "X-CSRF-TOKEN": "CSRF-Token"
+        }
+      }
+    })
+      .then((editor) => {
+        window.editor = editor;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  </script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+    integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script src="/js/editBlog.js"></script>
+</body>

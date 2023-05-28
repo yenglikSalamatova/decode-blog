@@ -1,0 +1,156 @@
+.container-article {
+  position: absolute;
+  width: 850px;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  padding: 50px;
+}
+.full-article {
+  position: relative;
+}
+.container-article h1 {
+  margin-bottom: 15px;
+  line-height: 1.3;
+}
+.container-article .article-header {
+  margin-bottom: 10px;
+}
+.container-article .article-footer {
+  margin-bottom: 25px;
+}
+.container-article .article-author a {
+  font-weight: 600;
+  font-size: 16px;
+  color: #25273b;
+}
+.container-article .datetime,
+.container-article .category {
+  font-size: 15px;
+}
+.full-article-img {
+  display: block;
+  width: 100%;
+  height: 300px;
+  margin: 0 auto;
+  object-fit: cover;
+}
+.content p {
+  margin-bottom: 30px;
+}
+.content h2 {
+  margin-bottom: 30px;
+}
+.content .image {
+  margin-bottom: 30px;
+}
+.content .image img {
+  width: 100%;
+}
+.divider {
+  width: 100%;
+  height: 2px;
+  background-color: #e1e1e1;
+  margin: 20px 0;
+}
+.comment-input {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  padding: 13px;
+  border: 1px solid #adadad;
+  border-radius: 6px;
+  width: 100%;
+}
+.comment-input textarea {
+  border: 2px solid transparent;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  resize: none;
+  width: 100%;
+  height: auto;
+  border: none;
+  overflow: hidden;
+}
+.comment-input textarea:focus {
+  outline: none;
+}
+.comment {
+  margin-top: 30px;
+}
+
+.comment .datetime {
+  color: #807f7f;
+  font-size: 14px;
+}
+.comment-text p {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.comment-answer-button {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.comment-answer-button p {
+  font-size: 15px;
+}
+
+.comment:hover {
+}
+.comment-header img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.comment-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.comment-author a {
+  font-weight: 600;
+  font-size: 16px;
+  color: #25273b;
+}
+.comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-icon {
+  cursor: pointer;
+}
+.tags {
+  margin-bottom: 30px;
+}
+.tags a {
+  color: #548eaa;
+  margin-right: 5px;
+}
+.comment-btn-group {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+.content ul {
+  list-style: circle;
+  line-height: 1.56;
+  margin-bottom: 30px;
+  font-size: 16px;
+  margin-left: 20px;
+}
+.content ol {
+  margin-left: 30px;
+  font-size: 16px;
+  list-style: decimal;
+  line-height: 1.56;
+  margin-bottom: 20px;
+}
+.content h3 {
+  margin-bottom: 20px;
+}
