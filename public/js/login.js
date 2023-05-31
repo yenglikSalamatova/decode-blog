@@ -5,9 +5,11 @@ const login = async (email, password) => {
     const res = await axios.post("/api/users/signin", { email, password });
     if (res.data.status === "success") {
       location.assign("/");
+    } else {
+      console.log(res);
     }
   } catch (err) {
-    window.location.assign("/login");
+    console.error(err);
   }
 };
 

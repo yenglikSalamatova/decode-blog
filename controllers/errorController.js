@@ -21,34 +21,43 @@ const handleValidationErrorDB = (err) => {
 const handlePassportError = () =>
   new AppError("Для доступа к ресурсу необходимо авторизоваться", 401);
 
-const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    error: err,
-    message: err.message,
-    stack: err.stack
-  });
-};
-
 const handleAdminRouteError = () => {
   return new AppError("Для доступа нужны права администратора", 401);
 };
 
-const sendErrorProd = (err, res) => {
-  // Operational error
-  // console.log(err.isOperational);
-  if (err.isOperational) {
-    res.status(err.statusCode).json({
+const sendErrorDev = (err, req, res) => {
+  // A) API
+  if (req.originalUrl.startsWith("/api")) {
+    return res.status(err.statusCode).json({
       status: err.status,
-      message: err.message
-    });
-  } else {
-    console.error("ERROR", err);
-    res.status(500).json({
-      status: "error",
-      message: "Что-то пошло не так!"
+      error: err,
+      message: err.message,
+      stack: err.stack
     });
   }
+};
+
+const sendErrorProd = (err, req, res) => {
+  // A) API
+  if (req.originalUrl.startsWith("/api")) {
+    // A) Operational, trusted error: send message to client
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message
+      });
+    }
+    // B) Programming or other unknown error: don't leak error details
+    // 1) Log error
+    console.error("ERROR 💥", err);
+    // 2) Send generic message
+    return res.status(500).json({
+      status: "error",
+      message: "Something went very wrong!"
+    });
+  }
+
+  // B) RENDERED WEBSITE
 };
 
 module.exports = (err, req, res, next) => {
@@ -57,7 +66,7 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || "error";
 
   if (process.env.NODE_ENV === "development") {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === "production") {
     // console.log(err);
     let error = {
@@ -76,7 +85,8 @@ module.exports = (err, req, res, next) => {
     if (error.message === "Unauth Passport Error")
       error = handlePassportError(error);
     if (error.message === "Admin Route Error") error = handleAdminRouteError();
+
     // console.log("Error after handling:", error);
-    sendErrorProd(error, res);
+    sendErrorProd(error, req, res);
   }
 };

@@ -11,7 +11,8 @@ router.post("/signup", userController.signUp);
 router.post(
   "/signin",
   passport.authenticate("local", {
-    failureRedirect: "/login"
+    successRedirect: "/",
+    failureRedirect: "/login?error=1"
   }),
   userController.signIn
 );
