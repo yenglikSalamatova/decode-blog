@@ -77,10 +77,8 @@ exports.getBlog = catchAsync(async (req, res, next) => {
 });
 
 exports.getLoginPage = catchAsync(async (req, res, next) => {
-  const errorMessage = req.flash("error");
   res.status(200).render("login", {
-    title: "Вход",
-    errorMessage
+    title: "Вход"
   });
 });
 
@@ -172,5 +170,17 @@ exports.getEditProfilePage = catchAsync(async (req, res, next) => {
   res.status(200).render("edit-profile", {
     title: "Редактировать профиль",
     user
+  });
+});
+
+exports.getUsersForAdmin = catchAsync(async (req, res, next) => {
+  const users = await User.find({ role: { $ne: "admin" } });
+  const user = await User.findById(req.user._id);
+  const blogsLength = await Blog.find({ author: user._id }).countDocuments();
+  res.status(200).render("adminUsers", {
+    title: "Пользователи",
+    users,
+    profileUser: user,
+    blogsLength
   });
 });

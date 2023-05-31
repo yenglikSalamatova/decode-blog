@@ -4,10 +4,7 @@ const login = async (email, password) => {
   try {
     const res = await axios.post("/api/users/signin", { email, password });
     if (res.data.status === "success") {
-      alert("Вход прошел успешно");
-      window.setTimeout(() => {
-        location.assign("/");
-      }, 1000);
+      location.assign("/");
     }
   } catch (err) {
     window.location.assign("/login");

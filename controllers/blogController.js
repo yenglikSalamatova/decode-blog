@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
 const Blogs = require("../models/blogModel");
 const Bookmark = require("../models/bookmarkModel");
 // const User = require("../models/userModel");
@@ -43,6 +45,9 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
 });
 
 exports.createBlog = catchAsync(async (req, res, next) => {
+  if (req.user.isBlocked) {
+    return next(new AppError("Вы заблокированы"));
+  }
   const trimmedTagsArr = trimmingTags(req.body.tags);
   let expiryDate;
   if (req.user.role === "admin") {
@@ -102,7 +107,13 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   // console.log(req.params.id);
   // console.log(req.body);
   const blog = await Blogs.findById(req.params.id);
-
+  fs.unlink(path.join(__dirname, "../public", blog.image), (err) => {
+    if (err) {
+      console.error("Ошибка при удалении файла:", err);
+    } else {
+      console.log("Файл успешно удален");
+    }
+  });
   if (!blog) {
     return next(new AppError("No blog found with that ID", 404));
   }
@@ -136,6 +147,13 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
 
 exports.deleteBlog = catchAsync(async (req, res, next) => {
   const blog = await Blogs.findByIdAndDelete(req.params.id);
+  fs.unlink(path.join(__dirname, "../public", blog.image), (err) => {
+    if (err) {
+      console.error("Ошибка при удалении файла:", err);
+    } else {
+      console.log("Файл успешно удален");
+    }
+  });
   const bookmarks = await Bookmark.find({ blog: req.params.id });
   console.log(bookmarks);
   if (!blog) {
@@ -147,70 +165,5 @@ exports.deleteBlog = catchAsync(async (req, res, next) => {
   res.status(204).json({
     status: "success",
     data: null
-  });
-});
-
-exports.getBlogStats = catchAsync(async (req, res, next) => {
-  const stats = await Blogs.aggregate([
-    {
-      $match: {}
-    },
-    {
-      $group: {
-        _id: "$author",
-        numBlogs: { $sum: 1 },
-        avgView: { $avg: "$views" },
-        minViews: { $min: "$views" },
-        maxViews: { $max: "$views" }
-      }
-    },
-    {
-      $sort: {
-        minViews: 1
-      }
-    }
-  ]);
-
-  res.status(200).json({
-    status: "ok",
-    data: { stats }
-  });
-});
-
-exports.getBlogsByYear = catchAsync(async (req, res, next) => {
-  const year = req.params.year * 1;
-  const blog = await Blogs.aggregate([
-    {
-      $match: {
-        createdAt: {
-          $gte: new Date(`${year}-01-01`),
-          $lte: new Date(`${year}-12-31`)
-        }
-      }
-    },
-    {
-      $group: {
-        _id: { $month: "$createdAt" },
-        numBlogs: { $sum: 1 },
-        blogs: { $push: "$title" }
-      }
-    },
-    {
-      $addFields: {
-        month: "$_id"
-      }
-    },
-    {
-      $project: {
-        _id: 0
-      }
-    },
-    {
-      $sort: { numBlogs: -1 }
-    }
-  ]);
-  res.status(200).json({
-    status: "ok",
-    data: { blog }
   });
 });

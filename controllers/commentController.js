@@ -1,8 +1,12 @@
 const Comments = require("../models/commentModel");
 const Blogs = require("../models/blogModel");
 const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
 
 exports.createComment = catchAsync(async (req, res, next) => {
+  if (req.user.isBlocked) {
+    return next(new AppError("Вы заблокированы!"));
+  }
   const newComment = await Comments.create({
     user: req.user.id,
     blog: req.body.blogId,

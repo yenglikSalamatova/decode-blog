@@ -40,6 +40,10 @@ exports.signIn = catchAsync(async (req, res, next) => {
 
   const user = await User.findOne({ email }).select("+password");
 
+  if (!user.active) {
+    return next(new AppError("Пользователь удалил аккаунт", 401));
+  }
+
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError("Incorrect email or password", 401));
   }
@@ -278,5 +282,23 @@ exports.deleteBookmark = catchAsync(async (req, res, next) => {
   res.status(204).json({
     status: "success",
     data: null
+  });
+});
+
+exports.blockUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.body.userId, {
+    isBlocked: true
+  });
+  res.status(200).json({
+    status: "success"
+  });
+});
+
+exports.unblockUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.body.userId, {
+    isBlocked: false
+  });
+  res.status(200).json({
+    status: "success"
   });
 });

@@ -64,6 +64,10 @@ const UserSchema = new mongoose.Schema({
     default: function () {
       return Date.now() + 24 * 60 * 60 * 1000;
     }
+  },
+  isBlocked: {
+    type: Boolean,
+    default: false
   }
 });
 

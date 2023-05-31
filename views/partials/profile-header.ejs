@@ -1,7 +1,7 @@
 <div class="myblogs-left-top">
   <% if (currentUser.role==='admin'&&currentUser.id==profileUser.id) { %>
   <a href="/user/<%= profileUser.username %>">Блоги</a>
-  <a href="">Пользователи</a>
+  <a href="/users/">Пользователи</a>
   <a href="/user/comments/<%= profileUser.username %>">Комментарии</a>
   <a href="/user/bookmarks/<%= profileUser.username %>">Закладки</a>
 

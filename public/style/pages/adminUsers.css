@@ -1,0 +1,34 @@
+.admins-users {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.admins-user {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+.admins-user_img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.admins-user_name {
+  color: #25273b;
+  font-weight: 600;
+}
+.admins-user__block {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 600;
+  color: #ff0d0d;
+}
+.admins-user__block svg path {
+  stroke: #ff0d0d;
+}
+.admins-user__unblock {
+  color: #378320;
+  font-weight: 600;
+}

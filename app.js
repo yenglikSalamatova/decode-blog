@@ -10,7 +10,6 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
-const flash = require("connect-flash");
 const compression = require("compression");
 
 // Errors import
@@ -98,12 +97,12 @@ app.use(
     })
     // cookie: {
     //   // secure: true, // set secure to true in production
-    //   // httpOnly: true,
+    //   httpOnly: true,
     //   maxAge: 3600000 * 24
     // }
   })
 );
-app.use(flash());
+
 app.use(passport.initialize());
 app.use(passport.session());
 

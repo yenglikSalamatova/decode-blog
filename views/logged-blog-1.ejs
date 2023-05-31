@@ -107,7 +107,11 @@
 
           <div class="comments-container">
             <form action="" class="comment-form">
-              <% if (currentUser) { %>
+              <% if (currentUser) { %> <% if (currentUser.isBlocked) { %>
+              <div class="alert alert-block">
+                Вы не можете оставлять комментарий, так как вы заблокированы!
+              </div>
+              <% } else { %>
               <div class="comment-input">
                 <textarea
                   type="text"
@@ -123,8 +127,7 @@
                   Оставить комментарий
                 </button>
               </div>
-              <% } else { %>
-
+              <% } %> <% } else { %>
               <div class="alert alert-info">
                 Чтобы оставить комментарий, необходимо
                 <a href="/login">войти</a> в вашу учетную запись или

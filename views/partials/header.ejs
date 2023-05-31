@@ -3,7 +3,7 @@
     <section class="header-top">
       <a href="/"><img src="/images/logo2.svg" alt="" class="logo" /></a>
       <div class="header-btns">
-        <% if(currentUser){ %>
+        <% if(currentUser){ %> <% if (!currentUser.isBlocked) { %>
         <a href="/new-blog" class="btn btn-icon"
           ><svg
             width="13"
@@ -21,6 +21,8 @@
             /></svg
           >Написать блог</a
         >
+        <% } %>
+
         <a href="/user/<%= currentUser.username %>" class="header_profile-img">
           <img src="<%= currentUser.photo %>" alt="" />
         </a>

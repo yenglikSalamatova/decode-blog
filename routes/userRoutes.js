@@ -7,13 +7,11 @@ const { upload } = require("../utils/multer");
 const router = express.Router();
 
 // Вход, регистрация, выход
-
 router.post("/signup", userController.signUp);
 router.post(
   "/signin",
   passport.authenticate("local", {
-    failureRedirect: "/login",
-    failureFlash: true
+    failureRedirect: "/login"
   }),
   userController.signIn
 );
@@ -23,6 +21,8 @@ router.get("/signout", userController.signOut);
 router.post("/forgotPassword", userController.forgotPassword);
 router.patch("/resetPassword/:token", userController.resetPassword);
 router.patch("/updateMyPassword/", isAuth, userController.updatePassword);
+router.patch("/blockUser", isAdmin, userController.blockUser);
+router.patch("/unblockUser", isAdmin, userController.unblockUser);
 
 // Обновление и удаление профиля юзера
 router.patch(
@@ -32,10 +32,6 @@ router.patch(
   userController.updateMe
 );
 router.delete("/deleteMe", isAuth, userController.deleteMe);
-
-// Получение профилей юзера и админа
-// router.get("/profile/:id", userController.getProfile);
-router.get("/admin/:id", isAdmin, userController.getAdminProfile);
 
 router.route("/").get(userController.getAllUsers);
 
