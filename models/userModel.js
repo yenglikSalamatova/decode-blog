@@ -58,6 +58,12 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
     select: false
+  },
+  expiryDate: {
+    type: Date,
+    default: function () {
+      return Date.now() + 24 * 60 * 60 * 1000;
+    }
   }
 });
 

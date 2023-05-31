@@ -11,15 +11,11 @@ router
   .post(isAuth, upload.single("blog-img"), blogController.createBlog);
 
 // CKEditor Image Upload
-router.post("/upload-image", upload.single("upload"), (req, res) => {
-  try {
-    const imageUrl = "/images/blog/" + req.file.filename;
-    res.status(201).json({ url: imageUrl });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Внутренняя ошибка сервера" });
-  }
-});
+router.post(
+  "/upload-image",
+  upload.single("upload"),
+  blogController.uploadCKEditor
+);
 
 router
   .route("/:id")

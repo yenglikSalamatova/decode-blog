@@ -11,9 +11,11 @@ dotenv.config({ path: "./config.env" });
 
 const app = require("./app");
 
-const DB = process.env.MONGO_URL;
+const DB = process.env.DATABASE_LOCAL;
 
-mongoose.connect(DB).then(() => console.log("MongoDB connection succesful!"));
+mongoose.connect(DB).then(() => {
+  console.log("MongoDB connection successful!");
+});
 
 const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT, () => {

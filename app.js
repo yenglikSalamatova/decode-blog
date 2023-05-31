@@ -37,23 +37,23 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // Security HTTP headers
-app.use(helmet());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      "script-src": [
-        "'self'",
-        "https://cdnjs.cloudflare.com",
-        "https://cdn.ckeditor.com/",
-        "https://cdn.ckbox.io",
-        "'unsafe-inline'"
-      ],
-      "default-src": ["'self'"],
-      "connect-src": ["'self'", "ws:"],
-      "img-src": ["'self'", "https://sp.tinymce.com", "data:"]
-    }
-  })
-);
+// app.use(helmet());
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       "script-src": [
+//         "'self'",
+//         "https://cdnjs.cloudflare.com",
+//         "https://cdn.ckeditor.com/",
+//         "https://cdn.ckbox.io",
+//         "'unsafe-inline'"
+//       ],
+//       "default-src": ["'self'"],
+//       "connect-src": ["'self'", "ws:"],
+//       "img-src": ["'self'", "https://sp.tinymce.com", "data:"]
+//     }
+//   })
+// );
 
 // Body parser
 app.use(express.json({ limit: "20kb" })); // MiddleWare - Анализ JSON в req.body
@@ -81,6 +81,9 @@ app.use(
   })
 );
 
+// Автоматически запуск задачи каждый день
+require("./utils/cron");
+
 // Auth middlewares session and passport
 require("./config/passport");
 
@@ -91,11 +94,11 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: mongooseStore.create({
-      mongoUrl: "mongodb://127.0.0.1:27017/decode-blog"
+      mongoUrl: process.env.MONGO_URL
     })
     // cookie: {
-    //   secure: true, // set secure to true in production
-    //   httpOnly: true,
+    //   // secure: true, // set secure to true in production
+    //   // httpOnly: true,
     //   maxAge: 3600000 * 24
     // }
   })

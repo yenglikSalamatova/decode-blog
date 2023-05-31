@@ -56,7 +56,8 @@ const BlogSchema = new mongoose.Schema({
   bookmarksCount: {
     type: Number,
     default: 0
-  }
+  },
+  expiryDate: Date
 });
 
 // BlogSchema.virtual('')
@@ -72,16 +73,6 @@ BlogSchema.pre("save", function (next) {
   next();
 });
 
-// BlogSchema.pre("save", function (next) {
-//   console.log("Will save document");
-//   next();
-// });
-
-// BlogSchema.post("save", function (doc, next) {
-//   console.log(doc);
-//   next();
-// });
-
 // Query Middleware - все запросы начинающиеся с find
 BlogSchema.pre(/^find/, function (next) {
   this.find({ secretBlog: { $ne: true } });
@@ -95,18 +86,10 @@ BlogSchema.pre(/^find/, async function (next) {
   next();
 });
 
-// BlogSchema.post(/^find/, function (docs, next) {
-//   this.populate({
-//     path: "author",
-//     select: "-__v"
-//   });
-//   next();
-// });
-
 // Aggregation MiddleWare
 BlogSchema.pre("aggregate", function (next) {
   this.pipeline().unshift({ $match: { secretBlog: { $ne: true } } });
-  // console.log(this.pipeline());
+
   next();
 });
 

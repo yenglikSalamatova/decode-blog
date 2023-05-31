@@ -20,8 +20,7 @@ exports.signUp = catchAsync(async (req, res) => {
     email: req.body.email,
     username: req.body.username,
     password: req.body.password,
-    re_password: req.body.re_password,
-    passwordChangedAt: req.body.passwordChangedAt
+    re_password: req.body.re_password
   });
 
   res.status(201).json({

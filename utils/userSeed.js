@@ -10,7 +10,7 @@ async function createAdmin() {
       email: "master@mail.ru",
       full_name: "Master",
       password: hash,
-      isAdmin: true,
+      isAdmin: true
     });
   }
 }

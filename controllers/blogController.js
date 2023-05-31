@@ -7,6 +7,12 @@ const APIFeatures = require("./../utils/apiFeatures");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
+const trimmingTags = (bodyTags) => {
+  const tagsArr = bodyTags.split(",");
+  const trimmedTagsArr = tagsArr.map((tag) => tag.trim());
+  return trimmedTagsArr;
+};
+
 exports.aliasTopBlogs = catchAsync(async (req, res, next) => {
   req.query.sort = "-views";
   next();
@@ -36,14 +42,15 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
   });
 });
 
-const trimmingTags = (bodyTags) => {
-  const tagsArr = bodyTags.split(",");
-  const trimmedTagsArr = tagsArr.map((tag) => tag.trim());
-  return trimmedTagsArr;
-};
-
 exports.createBlog = catchAsync(async (req, res, next) => {
   const trimmedTagsArr = trimmingTags(req.body.tags);
+  let expiryDate;
+  if (req.user.role === "admin") {
+    expiryDate = null;
+  } else {
+    // expiryDate = Date.now() + 30 * 60 * 1000;
+    expiryDate = Date.now() + 60 * 1000;
+  }
 
   const newBlog = await Blogs.create({
     title: req.body.blog_title,
@@ -53,8 +60,13 @@ exports.createBlog = catchAsync(async (req, res, next) => {
     description: req.body.newblog_description,
     image: `/images/blog/${req.file.filename}`,
     views: 0,
-    tags: trimmedTagsArr
+    tags: trimmedTagsArr,
+    expiryDate: expiryDate
   });
+
+  if (!newBlog) {
+    return next(new AppError("Не удалось создать новый блог"));
+  }
 
   res.status(201).json({
     status: "success",
@@ -64,9 +76,18 @@ exports.createBlog = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.uploadCKEditor = catchAsync(async (req, res, next) => {
+  try {
+    const imageUrl = "/images/blog/" + req.file.filename;
+    res.status(201).json({ url: imageUrl });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Внутренняя ошибка сервера" });
+  }
+});
+
 exports.getBlog = catchAsync(async (req, res, next) => {
   const blog = await Blogs.findById(req.params.id);
-
   if (!blog) {
     return next(new AppError("No blog found with that ID", 404));
   }
