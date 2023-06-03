@@ -26,8 +26,8 @@
               >
             </div>
             <div
-              data-blog-id="<%= blog._id %>"
-              class="article-bookmarks <% if (bookmark) { %>bookmark-active <% } %>"
+              data-blog-id="<%= blog.id %>"
+              class="article-bookmarks <% if (bookmark.length>0) { %>bookmark-active <% } %>"
             >
               <svg
                 width="18"
@@ -107,7 +107,8 @@
 
           <div class="comments-container">
             <form action="" class="comment-form">
-              <% if (currentUser) { %> <% if (currentUser.isBlocked) { %>
+              <% if (currentUser&&typeof currentUser!==undefined) { %> <% if
+              (currentUser.isBlocked) { %>
               <div class="alert alert-block">
                 Вы не можете оставлять комментарий, так как вы заблокированы!
               </div>
@@ -118,7 +119,7 @@
                   name="comment-textarea"
                   id="comment-textarea"
                   placeholder="Введите комментарий"
-                  data-blog-id="<%= blog._id %>"
+                  data-blog-id="<%= blog.id %>"
                 ></textarea>
               </div>
               <div class="comment-btn-group hidden">
@@ -139,8 +140,8 @@
             blog.comments.forEach((comment) => { %>
             <div
               class="comment"
-              data-comment-id="<%=comment._id%>"
-              data-blog-id="<%=blog._id%>"
+              data-comment-id="<%=comment.id%>"
+              data-blog-id="<%=blog.id%>"
             >
               <div class="comment-header">
                 <div class="comment-author">
@@ -151,7 +152,7 @@
                     "short", timeStyle: "short" }) %>
                   </p>
                 </div>
-                <%
+                <% if(currentUser&&typeof currentUser!==undefined) {%> <%
                 if(comment.user.id===currentUser.id||currentUser.role==="admin")
                 {%>
                 <div class="comment-settings">
@@ -183,7 +184,7 @@
                     </svg>
                   </div>
                 </div>
-                <%}%>
+                <%}%> <%}%>
               </div>
               <div class="comment-text">
                 <p class="comment-content"><%= comment.content %></p>

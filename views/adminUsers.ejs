@@ -22,14 +22,14 @@
               <a
                 href=""
                 class="admins-user__unblock"
-                data-user-id="<%= user._id %>"
+                data-user-id="<%= user.id %>"
                 >Разблокировать</a
               >
               <% } else { %>
               <a
                 href=""
                 class="admins-user__block"
-                data-user-id="<%= user._id %>"
+                data-user-id="<%= user.id %>"
               >
                 <svg
                   width="10"
@@ -59,13 +59,10 @@
           <p><span><%= profileUser.username %></span></p>
           <p><%= profileUser.description %></p>
           <p><%= blogsLength %> постов за все время</p>
-          <% if (currentUser.id == profileUser.id) { %>
-          <a
-            class="btn btn-fill"
-            href="/edit-profile/<%= currentUser.username %>"
-            >Редактировать</a
-          >
-          <% } %>
+          <% if (currentUser&&typeof currentUser!==undefined) { %> <% if
+          (currentUser.id.toString() === profileUser.id.toString()){ %>
+          <button class="btn btn-fill">Редактировать</button>
+          <% } %> <% } %>
         </div>
       </main>
     </div>

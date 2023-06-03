@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 70px;
+  gap: 20px;
 }
 .logo-login {
 }
@@ -59,4 +59,29 @@
 .form-login p a {
   font-weight: 600;
   color: #0d55ff;
+}
+.login_or {
+  font-weight: 700;
+  color: #25273b !important;
+}
+.btn__login_google,
+.btn__login_github {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: #fff;
+  transition: all 0.3s;
+}
+.btn__login_google {
+  background-color: #ed2020;
+}
+.btn__login_github {
+  background-color: #131111;
+}
+.btn__login_google:hover {
+  background-color: #c72222;
+}
+.btn__login_github:hover {
+  background-color: #221f1f;
 }

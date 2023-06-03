@@ -2,13 +2,25 @@ const form = document.querySelector(".form-login");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const formData = new FormData(form);
-  try {
-    const res = await axios.post("/api/users/signup", formData);
-    if (res.status === 201) {
-      location.href("/");
+
+  const data = {
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    username: document.getElementById("username").value,
+    re_password: document.getElementById("re_password").value
+  };
+  axios({
+    url: "http://localhost:8000/api/users/signup",
+    method: "post",
+    data: data,
+    headers: {
+      "Content-Type": "application/json"
     }
-  } catch (err) {
-    console.error(err);
-  }
+  })
+    .then((response) => {
+      location.assign("/login");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });

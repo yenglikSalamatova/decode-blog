@@ -25,7 +25,8 @@
                     ><%= blog.createdAt.toLocaleDateString() %></time
                   >
                 </div>
-                <% if (currentUser.id == profileUser.id) { %>
+                <% if (currentUser&& typeof currentUser!==undefined) { %> <% if
+                (currentUser.id.toString() === profileUser.id.toString()) { %>
                 <div class="article-top__right">
                   <svg
                     width="16"
@@ -44,7 +45,7 @@
                     />
                   </svg>
                   <div class="article-settings__btns hidden">
-                    <a href="/blog/edit/<%= blog._id %>" class="article-edit"
+                    <a href="/blog/edit/<%= blog.id %>" class="article-edit"
                       ><img src="/images/icons/pencil.svg" alt="" />
                       Редактировать</a
                     >
@@ -57,7 +58,7 @@
                     >
                   </div>
                 </div>
-                <% } %>
+                <% } %> <% } %>
               </div>
               <a href="/blog/<%= blog.slug %>">
                 <h3 class="heading heading-third"><%= blog.title %></h3>
@@ -141,19 +142,19 @@
           <p>Этот пользователь пока не опубликовал блоги</p>
           <% } %>
         </div>
-
         <div class="myblogs-right">
           <img src="<%= profileUser.photo %>" alt="" />
           <p><span><%= profileUser.username %></span></p>
           <p><%= profileUser.description %></p>
           <p><%= blogs.length %> постов за все время</p>
-          <% if (currentUser.id == profileUser.id) { %>
+          <% if(currentUser&& typeof currentUser!==undefined) {%> <% if
+          (currentUser.id.toString() === profileUser.id.toString()) { %>
           <a
             class="btn btn-fill"
             href="/edit-profile/<%= currentUser.username %>"
             >Редактировать</a
           >
-          <% } %>
+          <% } %> <% }%>
         </div>
       </main>
     </div>

@@ -4,8 +4,8 @@ const path = require("path");
 const User = require("../models/userModel");
 const Blog = require("../models/blogModel");
 
-function fsUnlinkPhoto(path) {
-  fs.unlink(path.join(__dirname, "../public", path), (err) => {
+function fsUnlinkPhoto(pathImg) {
+  fs.unlink(path.join(__dirname, "../public", pathImg), (err) => {
     if (err) {
       console.error("Ошибка при удалении файла:", err);
     } else {
@@ -21,11 +21,11 @@ cron.schedule("*/30 * * * *", async () => {
     const expiredBlogs = await Blog.find({ expiryDate: { $lte: new Date() } });
 
     for (const user of expiredUsers) {
-      await User.findByIdAndRemove(user._id);
+      await User.findByIdAndRemove(user.id);
       fsUnlinkPhoto(user.photo);
     }
     for (const blog of expiredBlogs) {
-      await Blog.findByIdAndDelete(blog._id);
+      await Blog.findByIdAndDelete(blog.id);
       const blogImagePath = path.join(__dirname, "../public", blog.image);
       fsUnlinkPhoto(blogImagePath);
       const blogContent = blog.text;

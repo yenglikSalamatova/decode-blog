@@ -3,10 +3,9 @@
 const login = async (email, password) => {
   try {
     const res = await axios.post("/api/users/signin", { email, password });
-    if (res.data.status === "success") {
+    console.log(res);
+    if (res.status === 200) {
       location.assign("/");
-    } else {
-      console.log(res);
     }
   } catch (err) {
     console.error(err);

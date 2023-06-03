@@ -9,12 +9,8 @@
           <h3 class="heading heading-third">Редактировать блог</h3>
         </div>
         <div class="form-box-new">
-          <input type="hidden" name="blogId" value="<%= blog._id %>" />
-          <input
-            type="hidden"
-            name="currentUser"
-            value="<%= currentUser.username %>"
-          />
+          <input type="hidden" name="blogId" value="<%= blog.id %>" />
+
           <input
             type="text"
             name="blog_title"
@@ -23,11 +19,11 @@
             value="<%= blog.title %>"
           />
           <select name="category" id="category">
-            <option selected value="<%= blog.category._id %>">
+            <option selected value="<%= blog.category.id %>">
               <%= blog.category.title %>
             </option>
             <% categories.forEach(category=> { %>
-            <option value="<%= category._id %>"><%= category.title %></option>
+            <option value="<%= category.id %>"><%= category.title %></option>
             <% }) %>
           </select>
           <label for="blog-img" class="file-label"
@@ -70,9 +66,9 @@
       image: {
         // Настраиваем название поля input для вставки изображения
         upload: {
-          fieldName: "upload"
+          fieldName: "upload",
           // ...
-        }
+        },
         // ...
       },
       simpleUpload: {
@@ -84,9 +80,9 @@
 
         // Headers sent along with the XMLHttpRequest to the upload server.
         headers: {
-          "X-CSRF-TOKEN": "CSRF-Token"
-        }
-      }
+          "X-CSRF-TOKEN": "CSRF-Token",
+        },
+      },
     })
       .then((editor) => {
         window.editor = editor;

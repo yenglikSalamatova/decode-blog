@@ -61,7 +61,7 @@ function createCommentMarkup(commentData) {
         <a href="/user/">${commentData.user.username}</a>
         <p class="datetime">${createdAt.toLocaleString([], {
           dateStyle: "short",
-          timeStyle: "short"
+          timeStyle: "short",
         })}</p>
       </div>
       <div class="comment-settings">
@@ -93,19 +93,25 @@ function createCommentMarkup(commentData) {
 
 btnAccept.addEventListener("click", async (e) => {
   e.preventDefault();
-  const newCommentText = commentTextArea.value;
-  const blogId = commentTextArea.getAttribute("data-blog-id");
-  const response = await axios.post("/api/comments/", {
-    newCommentText,
-    blogId
-  });
-  if (response.data.status === "success") {
-    commentTextArea.value = "";
-    const commentContainer = document.querySelector(".comments-container");
-    const newComment = createCommentMarkup(response.data.newComment);
-    commentContainer.insertAdjacentHTML("beforeend", newComment);
-    location.reload();
-  }
+  const data = {
+    newCommentText: commentTextArea.value,
+    blogId: commentTextArea.getAttribute("data-blog-id"),
+  };
+  // console.log(data);
+  axios({
+    url: "/api/comments/",
+    method: "post",
+    data,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      location.reload();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 function handleEditComment(event) {
@@ -131,7 +137,7 @@ function handleEditComment(event) {
     e.preventDefault();
     const res = await axios.patch("/api/comments/", {
       commentId,
-      updated: textarea.value
+      updated: textarea.value,
     });
     if (res.data.status === "success") {
       location.reload();
@@ -147,7 +153,7 @@ async function handleDeleteComment(event) {
   const confirmation = confirm("Вы точно хотите удалить комментарии?");
   if (confirmation) {
     const res = await axios.delete("/api/comments/", {
-      params: { commentId, blogId }
+      params: { commentId, blogId },
     });
     if (res.data.status === "success") {
       location.reload();

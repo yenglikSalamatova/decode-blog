@@ -35,9 +35,9 @@
             </div>
             <p><%= comment.content %></p>
             <a
-              href="/blog/<%= comment.blog.slug %>#<%= comment._id %>"
+              href="/blog/<%= comment.blog.slug %>#<%= comment.id %>"
               class="btn btn-fill"
-              data-comment-id="<%= comment._id %>"
+              data-comment-id="<%= comment.id %>"
               >Перейти к комментарию</a
             >
           </div>
@@ -49,7 +49,8 @@
           <p><span><%= profileUser.username %></span></p>
           <p><%= profileUser.description %></p>
           <p><%= blogsLength %> постов за все время</p>
-          <% if (currentUser.id == profileUser.id) { %>
+          <% if (currentUser && typeof currentUser!==undefined && currentUser.id
+          === profileUser.id){ %>
           <button class="btn btn-fill">Редактировать</button>
           <% } %>
         </div>

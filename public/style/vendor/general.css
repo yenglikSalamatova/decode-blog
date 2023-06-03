@@ -12,7 +12,7 @@ a {
   text-decoration: none;
 }
 .container {
-  max-width: 1300px;
+  max-width: 1600px;
   margin: 0 auto;
 }
 .btn,
@@ -26,6 +26,7 @@ a {
   font-size: 16px;
   transition: 0.3s ease;
   border: none;
+  border-radius: 6px;
 }
 .logo {
   width: 225px;
@@ -68,7 +69,7 @@ h4 {
 
 .btn-fill {
   background-color: #0d55ff;
-  border-radius: 6px;
+
   color: #fff;
   transition: 0.3s;
 }

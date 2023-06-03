@@ -25,10 +25,11 @@
                     ><%= bookmark.blog.createdAt.toLocaleDateString() %></time
                   >
                 </div>
-                <% if (currentUser.id === profileUser.id) { %>
+                <% if (currentUser&&typeof
+                currentUser!==undefined&&currentUser.id === profileUser.id) { %>
                 <div
                   class="article-bookmarks bookmark-active"
-                  data-blog-id="<%= bookmark.blog._id %>"
+                  data-blog-id="<%= bookmark.blog.id %>"
                   data-current-user="<%= currentUser.id %>"
                 >
                   <svg
@@ -121,7 +122,8 @@
           <p><span><%= profileUser.username %></span></p>
           <p><%= profileUser.description %></p>
           <p><%= blogsLength %> постов за все время</p>
-          <% if (currentUser.id == profileUser.id) { %>
+          <% if (currentUser && typeof currentUser!==undefined && currentUser.id
+          === profileUser.id){ %>
           <button class="btn btn-fill">Редактировать</button>
           <% } %>
         </div>
@@ -133,7 +135,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="/js/profile.js"></script>
     <script src="/js/bookmark.js"></script>
   </body>
 </html>

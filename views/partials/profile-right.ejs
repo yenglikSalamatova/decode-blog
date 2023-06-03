@@ -1,0 +1,12 @@
+<div class="myblogs-right">
+  <img src="<%= profileUser.photo %>" alt="" />
+  <p><span><%= profileUser.username %></span></p>
+  <p><%= profileUser.description %></p>
+  <p><%= blogs.length %> постов за все время</p>
+  <% if (currentUser&&typeof currentUser!==undefined&&currentUser.id.toString()
+  === profileUser.id.toString()) { %>
+  <a class="btn btn-fill" href="/edit-profile/<%= currentUser.username %>"
+    >Редактировать</a
+  >
+  <% } %>
+</div>

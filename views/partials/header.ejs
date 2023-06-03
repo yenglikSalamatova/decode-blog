@@ -3,7 +3,8 @@
     <section class="header-top">
       <a href="/"><img src="/images/logo2.svg" alt="" class="logo" /></a>
       <div class="header-btns">
-        <% if(currentUser){ %> <% if (!currentUser.isBlocked) { %>
+        <% if(currentUser&&typeof currentUser!==undefined){ %> <% if
+        (!currentUser.isBlocked) { %>
         <a href="/new-blog" class="btn btn-icon"
           ><svg
             width="13"
@@ -97,7 +98,7 @@
         />
       </form>
       <div class="categories">
-        <% for( let i = 0; i < 5; i++ ) { %>
+        <% for( let i = 0; i < 7; i++ ) { %>
         <a href="?category=<%= categories[i].slug %>">
           <%= categories[i].title %>
         </a>
@@ -106,7 +107,7 @@
           >Еще <img src="/images/icons/down-arrow.svg" alt="" />
         </a>
         <div class="dropdown-categories">
-          <% for( let i = 5; i < categories.length; i++ ) { %>
+          <% for( let i = 7; i < categories.length; i++ ) { %>
           <a href="?category=<%= categories[i].slug %>">
             <%= categories[i].title %>
           </a>

@@ -65,6 +65,7 @@
 .my-article {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 300px;
   gap: 30px;
 }
 .my-article h3 {

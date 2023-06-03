@@ -15,7 +15,7 @@ const categoriesArr = [
 ];
 
 exports.writeDataCategories = async (req, res) => {
-  const length = await Category.countDocuments().maxTimeMS(20000);
+  const length = await Category.countDocuments();
   if (!length) {
     categoriesArr.forEach(async (el, index) => {
       const slug = slugify(el, { lower: true });

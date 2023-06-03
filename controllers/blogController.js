@@ -39,8 +39,8 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
     status: "success",
     results: blogs.length,
     data: {
-      blogs
-    }
+      blogs,
+    },
   });
 });
 
@@ -53,20 +53,20 @@ exports.createBlog = catchAsync(async (req, res, next) => {
   if (req.user.role === "admin") {
     expiryDate = null;
   } else {
-    // expiryDate = Date.now() + 30 * 60 * 1000;
-    expiryDate = Date.now() + 60 * 1000;
+    expiryDate = Date.now() + 30 * 60 * 1000;
+    // expiryDate = Date.now() + 60 * 1000;
   }
 
   const newBlog = await Blogs.create({
     title: req.body.blog_title,
     text: req.body.editor,
-    author: req.user._id,
+    author: req.user.id,
     category: req.body.category,
     description: req.body.newblog_description,
     image: `/images/blog/${req.file.filename}`,
     views: 0,
     tags: trimmedTagsArr,
-    expiryDate: expiryDate
+    expiryDate: expiryDate,
   });
 
   if (!newBlog) {
@@ -76,15 +76,16 @@ exports.createBlog = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: "success",
     data: {
-      newBlog
-    }
+      newBlog,
+    },
   });
 });
 
 exports.uploadCKEditor = catchAsync(async (req, res, next) => {
   try {
     const imageUrl = "/images/blog/" + req.file.filename;
-    res.status(201).json({ url: imageUrl });
+    console.log(imageUrl);
+    res.status(201).json({ uploaded: true, url: imageUrl });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Внутренняя ошибка сервера" });
@@ -99,7 +100,7 @@ exports.getBlog = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "ok",
-    data: { blog }
+    data: { blog },
   });
 });
 
@@ -107,13 +108,7 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   // console.log(req.params.id);
   // console.log(req.body);
   const blog = await Blogs.findById(req.params.id);
-  fs.unlink(path.join(__dirname, "../public", blog.image), (err) => {
-    if (err) {
-      console.error("Ошибка при удалении файла:", err);
-    } else {
-      console.log("Файл успешно удален");
-    }
-  });
+
   if (!blog) {
     return next(new AppError("No blog found with that ID", 404));
   }
@@ -131,7 +126,7 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
     image: image,
     author: blog.author,
     text: req.body.editor,
-    tags: trimmedTagsArr
+    tags: trimmedTagsArr,
   };
 
   Object.assign(blog, updatedBlog);
@@ -140,8 +135,8 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: "success",
     data: {
-      blog: updated
-    }
+      blog: updated,
+    },
   });
 });
 
@@ -164,6 +159,6 @@ exports.deleteBlog = catchAsync(async (req, res, next) => {
   }
   res.status(204).json({
     status: "success",
-    data: null
+    data: null,
   });
 });

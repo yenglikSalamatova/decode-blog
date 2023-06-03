@@ -45,26 +45,10 @@ const ensureAuth = (req, res, next) => {
   return next();
 };
 
-const currentUserMiddleware = async (req, res, next) => {
-  // console.log(req.user);
-  try {
-    if (req.user) {
-      res.locals.currentUser = req.user;
-      next();
-    } else {
-      res.locals.currentUser = 0;
-      next();
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
 module.exports = {
   isAuth,
   isAdmin,
   ensureAuth,
   checkBlogAccess,
   checkAccountAccess,
-  currentUserMiddleware
 };

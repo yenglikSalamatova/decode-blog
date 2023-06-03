@@ -11,17 +11,45 @@ router.post("/signup", userController.signUp);
 router.post(
   "/signin",
   passport.authenticate("local", {
-    successRedirect: "/",
     failureRedirect: "/login?error=1"
   }),
   userController.signIn
 );
 router.get("/signout", userController.signOut);
 
-// Пароль
-router.post("/forgotPassword", userController.forgotPassword);
-router.patch("/resetPassword/:token", userController.resetPassword);
-router.patch("/updateMyPassword/", isAuth, userController.updatePassword);
+// Google
+router.get(
+  "/auth/google",
+  passport.authenticate(
+    "google",
+    { scope: ["email", "profile"] },
+    async (req, res) => {
+      res.redirect("/");
+    }
+  )
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/login"
+  })
+);
+
+//GitHub
+router.get("/auth/github", passport.authenticate("github"));
+
+router.get(
+  "/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/");
+  }
+);
+
+// Блок пользователя
 router.patch("/blockUser", isAdmin, userController.blockUser);
 router.patch("/unblockUser", isAdmin, userController.unblockUser);
 

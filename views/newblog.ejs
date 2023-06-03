@@ -18,7 +18,7 @@
             <select name="category" id="category">
               <option disabled selected value="">Выберите категорию</option>
               <% categories.forEach(category=> { %>
-              <option value="<%= category._id %>"><%= category.title %></option>
+              <option value="<%= category.id %>"><%= category.title %></option>
               <% }) %>
             </select>
             <label for="blog-img" class="file-label"
@@ -58,23 +58,21 @@
         image: {
           // Настраиваем название поля input для вставки изображения
           upload: {
-            fieldName: "upload"
-            // ...
-          }
-          // ...
+            fieldName: "upload",
+          },
         },
         simpleUpload: {
           // The URL that the images are uploaded to.
-          uploadUrl: "http://127.0.0.1:8000/api/blogs/upload-image",
+          uploadUrl: "http://localhost:8000/api/blogs/upload-image",
 
           // Enable the XMLHttpRequest.withCredentials property.
           withCredentials: true,
 
           // Headers sent along with the XMLHttpRequest to the upload server.
           headers: {
-            "X-CSRF-TOKEN": "CSRF-Token"
-          }
-        }
+            "X-CSRF-TOKEN": "CSRF-Token",
+          },
+        },
       })
         .then((editor) => {
           window.editor = editor;

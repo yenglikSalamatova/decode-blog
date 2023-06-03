@@ -1,9 +1,7 @@
-const crypto = require("crypto");
 const User = require("./../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const Blog = require("../models/blogModel");
 const AppError = require("../utils/appError");
-const sendEmail = require("../utils/email");
 const Bookmark = require("../models/bookmarkModel");
 
 const filterObj = (obj, ...allowedFields) => {
@@ -14,21 +12,30 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.signUp = catchAsync(async (req, res) => {
-  // Хэширование пароля и валидатор сделаны в User Model
-  const newUser = await User.create({
-    email: req.body.email,
-    username: req.body.username,
-    password: req.body.password,
-    re_password: req.body.re_password
-  });
-
-  res.status(201).json({
-    status: "success",
-    data: {
-      newUser
-    }
-  });
+exports.signUp = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  // Хэширование пароля  в User Model
+  if (
+    req.body.email.length > 5 &&
+    req.body.username &&
+    req.body.password &&
+    req.body.re_password
+  ) {
+    const newUser = await User.create({
+      email: req.body.email,
+      username: req.body.username,
+      password: req.body.password,
+      re_password: req.body.re_password,
+    });
+    res.status(201).json({
+      status: "success",
+      data: {
+        newUser,
+      },
+    });
+  } else {
+    return next(new AppError("Произошла ошибка при создании аккаунта", 400));
+  }
 });
 
 exports.signIn = catchAsync(async (req, res, next) => {
@@ -36,29 +43,29 @@ exports.signIn = catchAsync(async (req, res, next) => {
 
   const user = await User.findOne({ email }).select("+password");
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     data: {
-      user
-    }
+      user,
+    },
   });
 });
 
-exports.signOut = (req, res) => {
+exports.signOut = catchAsync(async (req, res, next) => {
   req.logout(function (err) {
-    if (err) console.log(err);
-    req.user = undefined;
-    res.clearCookie("decode-blog.session").redirect("/");
+    if (err) return next(err);
+    req.user = null;
+    res.redirect("/");
   });
-};
+});
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find();
   res.status(200).json({
     status: "success",
     data: {
-      users
-    }
+      users,
+    },
   });
 });
 
@@ -68,14 +75,14 @@ exports.getUser = catchAsync(async (req, res) => {
     status: "success",
     data: {
       // user
-    }
+    },
   });
 });
 
 exports.updateUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-    runValidators: true
+    runValidators: true,
   });
 
   if (!user) {
@@ -85,8 +92,8 @@ exports.updateUser = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      user
-    }
+      user,
+    },
   });
 });
 
@@ -99,76 +106,14 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
   res.status(204).json({
     status: "success",
-    data: null
+    data: null,
   });
 });
 
 exports.getAdminProfile = catchAsync(async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user.id);
   const blogs = await Blog.find().populate("author").populate("category");
   res.render("adminProfile", { user: user, blogs });
-});
-
-exports.forgotPassword = catchAsync(async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) {
-    return next(new AppError("Такого пользователя не существует", 404));
-  }
-  // Реализуем смену пароля благодаря токену, который мы пришлем через имейл
-  const resetToken = user.createPasswordResetToken();
-  await user.save({ validateBeforeSave: false });
-
-  const resetURL = `${req.protocol}://${req.get(
-    "host"
-  )}/api/resetPassword/${resetToken}`;
-
-  const message = `Забыли пароль? Сделайте PATCH запрос с вашим новым паролем и подвердите пароль для ${resetURL}.\n Если вы не забыли пароль, то игнорируйте письмо! `;
-  try {
-    await sendEmail({
-      email: user.email,
-      subject: "Ваш токен для сброса пароля (действителен 10 минут)",
-      message
-    });
-
-    res.status(200).json({
-      status: "success",
-      message: "Token sent to email"
-    });
-  } catch (err) {
-    user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
-    await user.save({ validateBeforeSave: false });
-    return next(
-      new AppError("Ошибка при отправке письма. Попробуйте позже", 500)
-    );
-  }
-});
-
-exports.resetPassword = catchAsync(async (req, res, next) => {
-  const hashedToken = crypto
-    .createHash("sha256")
-    .update(req.params.token)
-    .digest("hex");
-
-  const user = await User.findOne({
-    passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() }
-  });
-
-  if (!user) {
-    return next(new AppError("Токен не действителен или истек", 400));
-  }
-
-  user.password = req.body.password;
-  user.re_password = req.body.re_password;
-  user.passwordResetToken = undefined;
-  user.passwordResetExpires = undefined;
-  await user.save();
-
-  res.status(200).json({
-    status: "success",
-    message: "Пароль изменен"
-  });
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -191,7 +136,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   });
   res.status(200).json({
     status: "success",
-    message: "Пароль изменен"
+    message: "Пароль изменен",
   });
 });
 
@@ -214,15 +159,15 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
-    runValidators: true
+    runValidators: true,
   });
 
   res.status(200).json({
     status: "success",
     data: {
-      updatedUser
+      updatedUser,
     },
-    message: "Данные обновлены"
+    message: "Данные обновлены",
   });
 });
 
@@ -231,62 +176,62 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
   res.status(204).json({
     status: "success",
-    data: null
+    data: null,
   });
 });
 
 exports.addBookmark = catchAsync(async (req, res, next) => {
-  const currentUser = req.user.id;
+  const currentUser = req.user;
   const currentBlog = req.params.id;
 
   const newBookmark = await Bookmark.create({
-    user: currentUser,
+    user: currentUser.id,
     blog: currentBlog,
-    state: "active"
+    state: "active",
   });
   await Blog.findByIdAndUpdate(req.params.id, {
-    $inc: { bookmarksCount: 1 }
+    $inc: { bookmarksCount: 1 },
   });
 
   res.status(200).json({
     status: "success",
-    data: newBookmark
+    data: newBookmark,
   });
 });
 
 exports.deleteBookmark = catchAsync(async (req, res, next) => {
-  const currentUser = req.user.id;
+  const currentUser = req.user;
   const currentBlog = req.params.id;
   const deletedBookmark = await Bookmark.findOneAndDelete({
-    user: currentUser,
-    blog: currentBlog
+    user: currentUser.id,
+    blog: currentBlog,
   });
   if (!deletedBookmark) {
     return next(new AppError("Блог не найден", 404));
   }
   await Blog.findByIdAndUpdate(req.params.id, {
-    $inc: { bookmarksCount: -1 }
+    $inc: { bookmarksCount: -1 },
   });
   res.status(204).json({
     status: "success",
-    data: null
+    data: null,
   });
 });
 
 exports.blockUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.body.userId, {
-    isBlocked: true
+    isBlocked: true,
   });
   res.status(200).json({
-    status: "success"
+    status: "success",
   });
 });
 
 exports.unblockUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.body.userId, {
-    isBlocked: false
+    isBlocked: false,
   });
   res.status(200).json({
-    status: "success"
+    status: "success",
   });
 });

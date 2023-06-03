@@ -4,12 +4,17 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema({
+  googleId: {
+    type: String,
+  },
+  githubId: {
+    type: String,
+  },
   email: {
     type: String,
-    required: [true, "Пожалуйста введите вашу почту!"],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "Пожалуйста напишите действительный email"]
+    validate: [validator.isEmail, "Пожалуйста напишите действительный email"],
   },
   username: {
     type: String,
@@ -18,57 +23,55 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Пожалуйста введите ваш ник, он должен быть уникальным!"],
     validate: {
       validator: validator.isAlphanumeric,
-      message: "Username должен содержать только английские буквы и цифры"
-    }
+      message: "Username должен содержать только английские буквы и цифры",
+    },
   },
   photo: {
     type: String,
-    default: "/images/default_user_avatar.png"
+    default: "/images/default_user_avatar.png",
   },
   role: {
     type: String,
     enum: ["user", "admin"],
-    default: "user"
+    default: "user",
   },
   password: {
     type: String,
-    required: [true, "Напишите пароль"],
     minlength: 8,
-    select: false
+    select: false,
   },
   re_password: {
     type: String,
-    required: [true, "Повторите пароль"],
     validate: {
       // Работает только при создании и сохранении (create, save)
       validator: function (el) {
         return el === this.password;
       },
-      message: "Пароли не совпадают"
-    }
+      message: "Пароли не совпадают",
+    },
   },
   passwordChangedAt: Date,
   description: {
     type: String,
-    trim: true
+    trim: true,
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
   active: {
     type: Boolean,
     default: true,
-    select: false
+    select: false,
   },
   expiryDate: {
     type: Date,
     default: function () {
       return Date.now() + 24 * 60 * 60 * 1000;
-    }
+    },
   },
   isBlocked: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 UserSchema.pre("save", async function (next) {
