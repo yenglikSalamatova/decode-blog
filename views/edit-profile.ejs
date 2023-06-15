@@ -43,9 +43,16 @@
               id="description"
               value="<%= user.description %>"
             />
+            <input
+              class="input-id"
+              type="hidden"
+              name=""
+              value="<%= user.id %>"
+            />
+            <button class="btn btn-delete">Удалить аккаунт</button>
           </div>
 
-          <button type="submit" class="btn btn-fill">Создать</button>
+          <button type="submit" class="btn btn-fill">Обновить</button>
         </form>
       </div>
     </div>

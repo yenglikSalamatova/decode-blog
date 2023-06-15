@@ -12,38 +12,33 @@ const BlogSchema = new mongoose.Schema({
     required: [true, "У блога должно быть название"],
     unique: true,
     trim: true,
-    maxlength: [
-      100,
-      "У блога должно быть название меньше или ровно 100 символов"
-    ],
-    minlength: [5, "У блога должно быть название больше 5 символов"]
+    minlength: [2, "У блога должно быть название больше 2 символов"],
     // validate: [validator.isAlpha, "Блог должен состоять только из букв"],
   },
   text: {
     type: String,
     trim: true,
     required: [true, "У блога должен быть контент"],
-    minlength: [300, "У блога должно быть текст больше 300 символов"]
   },
   author: { type: Schema.Types.ObjectId, ref: "User" },
   category: {
     type: Schema.Types.ObjectId,
     ref: "Category",
-    required: [true, "У блога должна быть категория"]
+    required: [true, "У блога должна быть категория"],
   },
 
   description: {
     type: String,
     trim: true,
-    required: [true, "У блога должно быть описание"]
+    required: [true, "У блога должно быть описание"],
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
   image: {
     type: String,
-    required: [true, "У блога должна быть картинка"]
+    required: [true, "У блога должна быть картинка"],
   },
   views: Number,
   comments: [{ type: mongoose.Schema.ObjectId, ref: "Comment" }],
@@ -51,13 +46,13 @@ const BlogSchema = new mongoose.Schema({
   slug: String,
   secretBlog: {
     type: Boolean,
-    default: false
+    default: false,
   },
   bookmarksCount: {
     type: Number,
-    default: 0
+    default: 0,
   },
-  expiryDate: Date
+  expiryDate: Date,
 });
 
 // BlogSchema.virtual('')
@@ -67,7 +62,7 @@ BlogSchema.pre("save", function (next) {
   this.slug = slugify(
     transliteration.transliterate(this.title).replace(/[^a-zA-Z0-9-\s]/g, ""),
     {
-      lower: true
+      lower: true,
     }
   );
   next();

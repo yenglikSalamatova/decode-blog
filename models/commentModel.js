@@ -15,8 +15,6 @@ const commentSchema = new mongoose.Schema({
     type: String,
     required: [true, "Комментарий не должен быть пустым"],
     trim: true,
-    maxlength: [400, "До 400 символов"],
-    minlength: [10, "От 10 символов"],
   },
   createdAt: { type: Date, default: Date.now },
 });

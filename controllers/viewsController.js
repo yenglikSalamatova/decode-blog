@@ -128,7 +128,9 @@ exports.getNewBlogPage = catchAsync(async (req, res, next) => {
 });
 
 exports.getEditBlogPage = catchAsync(async (req, res, next) => {
-  const blog = await Blog.findById(req.params.id).populate("category");
+  const blog = await Blog.findById(req.params.id)
+    .populate("category")
+    .populate("author");
   res.status(200).render("editblog", {
     title: "Редактировать блог",
     blog,
@@ -137,7 +139,7 @@ exports.getEditBlogPage = catchAsync(async (req, res, next) => {
 
 exports.getBookmarks = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ username: req.params.username });
-  const bookmarks = await Bookmark.find({ user: req.user.id })
+  const bookmarks = await Bookmark.find({ user: user.id })
     .populate("blog")
     .populate({
       path: "blog",

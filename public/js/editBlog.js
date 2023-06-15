@@ -5,12 +5,12 @@ form.addEventListener("submit", async (e) => {
   const formData = new FormData(form);
   const blogId = formData.get("blogId");
   const currentUsername = formData.get("currentUser");
-
+  console.log(currentUsername);
   try {
     const response = await axios.patch(`/api/blogs/${blogId}`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
 
     if (response.status === 201) {

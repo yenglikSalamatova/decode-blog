@@ -11,7 +11,7 @@ router.post("/signup", userController.signUp);
 router.post(
   "/signin",
   passport.authenticate("local", {
-    failureRedirect: "/login?error=1"
+    failureRedirect: "/login?error=1",
   }),
   userController.signIn
 );
@@ -33,7 +33,7 @@ router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
     successRedirect: "/",
-    failureRedirect: "/login"
+    failureRedirect: "/login",
   })
 );
 
@@ -60,7 +60,7 @@ router.patch(
   isAuth,
   userController.updateMe
 );
-router.delete("/deleteMe", isAuth, userController.deleteMe);
+router.delete("/deleteMe/:id", userController.deleteMe);
 
 router.route("/").get(userController.getAllUsers);
 

@@ -146,7 +146,9 @@
               <div class="comment-header">
                 <div class="comment-author">
                   <img src="<%=comment.user.photo%>" alt="" />
-                  <a href="/user/"><%= comment.user.username %></a>
+                  <a href="/user/<%= comment.user.username %>"
+                    ><%= comment.user.username %></a
+                  >
                   <p class="datetime">
                     <%= comment.createdAt.toLocaleString([], { dateStyle:
                     "short", timeStyle: "short" }) %>

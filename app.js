@@ -35,8 +35,8 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Автоматически запуск задачи каждый день
-require("./utils/cron");
+// Автоматически запуск задачи каждый день -- выключено
+// require("./utils/cron");
 
 // Auth middlewares session and passport
 require("./config/passport");

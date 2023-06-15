@@ -3,10 +3,11 @@ const AppError = require("../utils/appError");
 const catchAsync = require("./catchAsync");
 
 const isAuth = (req, res, next) => {
-  if (req.isAuthenticated()) {
+  if (req.user) {
     return next();
+  } else {
+    return next(new AppError("Unauth Passport Error", 401));
   }
-  return next(new AppError("Unauth Passport Error", 401));
 };
 
 const isAdmin = (req, res, next) => {

@@ -1,7 +1,6 @@
 <div class="myblogs-left-top">
-  <% if (typeof currentUser!==undefined && currentUser) { %> <% if
-  (currentUser.role==='admin'&&(currentUser.id.toString() ===
-  profileUser.id.toString())) { %>
+  <% if (typeof currentUser!==undefined && currentUser &&
+  currentUser.role==='admin'&&(currentUser.id == profileUser.id)) { %>
   <a href="/user/<%= profileUser.username %>">Блоги</a>
   <a href="/users/">Пользователи</a>
   <a href="/user/comments/<%= profileUser.username %>">Комментарии</a>
@@ -11,5 +10,5 @@
   <a href="/user/<%= profileUser.username %>">Блоги</a>
   <a href="/user/comments/<%= profileUser.username %>">Комментарии</a>
   <a href="/user/bookmarks/<%= profileUser.username %>">Закладки</a>
-  <% } %> <% } %>
+  <% } %>
 </div>

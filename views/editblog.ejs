@@ -10,7 +10,11 @@
         </div>
         <div class="form-box-new">
           <input type="hidden" name="blogId" value="<%= blog.id %>" />
-
+          <input
+            type="hidden"
+            name="currentUser"
+            value="<%= blog.author.username %>"
+          />
           <input
             type="text"
             name="blog_title"

@@ -172,8 +172,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteMe = catchAsync(async (req, res, next) => {
-  // Фактически не удаляем пользователя, деактивируем аккаунт
-  await User.findByIdAndUpdate(req.user.id, { active: false });
+  console.log(req.params.id);
+  await User.deleteOne({ _id: req.params.id });
   res.status(204).json({
     status: "success",
     data: null,
@@ -181,12 +181,9 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 });
 
 exports.addBookmark = catchAsync(async (req, res, next) => {
-  const currentUser = req.user;
-  const currentBlog = req.params.id;
-
   const newBookmark = await Bookmark.create({
-    user: currentUser.id,
-    blog: currentBlog,
+    user: req.user.id,
+    blog: req.params.id,
     state: "active",
   });
   await Blog.findByIdAndUpdate(req.params.id, {
@@ -200,11 +197,9 @@ exports.addBookmark = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteBookmark = catchAsync(async (req, res, next) => {
-  const currentUser = req.user;
-  const currentBlog = req.params.id;
   const deletedBookmark = await Bookmark.findOneAndDelete({
-    user: currentUser.id,
-    blog: currentBlog,
+    user: req.user.id,
+    blog: req.params.id,
   });
   if (!deletedBookmark) {
     return next(new AppError("Блог не найден", 404));
