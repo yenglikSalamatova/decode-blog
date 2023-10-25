@@ -41,13 +41,18 @@ app.use(express.urlencoded({ extended: true }));
 // Auth middlewares session and passport
 require("./config/passport");
 
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 app.use(
   session({
     name: "decode-blog.session",
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    store: new mongooseStore({ url: process.env.MONGO_URI }),
+    store: new mongooseStore({ mongooseConnection: mongoose.connection }),
     // cookie: {
     //   secure: true, // set secure to true in production
     //   httpOnly: true,
