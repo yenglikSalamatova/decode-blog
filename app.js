@@ -6,6 +6,7 @@ const session = require("express-session");
 const mongooseStore = require("connect-mongo");
 const passport = require("passport");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 // Errors import
 // const AppError = require("./utils/appError");
