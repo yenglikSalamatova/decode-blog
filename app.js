@@ -2,7 +2,8 @@
 const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
-
+const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
 const passport = require("passport");
 const cors = require("cors");
 
@@ -39,6 +40,21 @@ app.use(express.urlencoded({ extended: true }));
 
 // Auth middlewares session and passport
 require("./config/passport");
+
+app.use(
+  session({
+    name: "decode-blog.session",
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    // cookie: {
+    //   secure: true, // set secure to true in production
+    //   httpOnly: true,
+    //   maxAge: 3600000 * 24,
+    // },
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
