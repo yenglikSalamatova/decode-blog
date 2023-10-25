@@ -28,7 +28,7 @@
     "@ckeditor/ckeditor5-ui": "^37.1.0",
     "@ckeditor/ckeditor5-upload": "^37.1.0",
     "bcrypt": "^5.1.0",
-    "connect-mongo": "^5.0.0",
+    "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.9",

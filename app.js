@@ -3,7 +3,7 @@ const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const session = require("express-session");
-const mongooseStore = require("connect-mongo");
+const mongooseStore = require("connect-mongo")(session);
 const passport = require("passport");
 const cors = require("cors");
 
@@ -23,7 +23,7 @@ const categoryController = require("./controllers/categoryController");
 const app = express();
 
 //CORS
-// app.use(cors());
+app.use(cors());
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
@@ -46,10 +46,8 @@ app.use(
     name: "decode-blog.session",
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
-    store: mongooseStore.create({
-      mongoUrl: process.env.DATABASE_LOCAL,
-    }),
+    saveUninitialized: true,
+    store: new mongooseStore({ url: process.env.MONGO_URI }),
     // cookie: {
     //   secure: true, // set secure to true in production
     //   httpOnly: true,
